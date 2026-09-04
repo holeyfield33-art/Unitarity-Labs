@@ -4,7 +4,7 @@ This package implements only the synthetic rank-syndrome construction
 documented in docs/RANK_SYNDROME_ECC.md.
 """
 
-from .linear_measurements import GaussianLinearMap, IdentityLinearMap
+from .linear_measurements import FixedScaleNestedGaussianLinearMap, GaussianLinearMap, IdentityLinearMap
 from .rank_syndrome import (
 	DecodeDiagnostics,
 	RecoveryMetrics,
@@ -18,6 +18,7 @@ from .rank_syndrome import (
 
 __all__ = [
 	"GaussianLinearMap",
+	"FixedScaleNestedGaussianLinearMap",
 	"IdentityLinearMap",
 	"DecodeDiagnostics",
 	"RecoveryMetrics",

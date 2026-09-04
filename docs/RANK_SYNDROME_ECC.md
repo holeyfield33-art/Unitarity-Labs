@@ -37,6 +37,18 @@ $$P^*(z) = \sum_i z_i A_i,$$
 and its Frobenius inner-product identity is numerically tested to tolerance
 $10^{-12}$.
 
+## Normalization Audit
+
+**MEASURED.** Two explicitly separate experimental conditions are retained.
+`m_normalized` uses the original rows $G_i/\sqrt{m}$, so its retained rows are
+rescaled when $m$ changes. `fixed_scale_nested` uses $G_i/\sqrt{dT}$; its first
+$m_1$ rows are exactly the same at every $m_2>m_1$. The latter normalization
+has variance $1/(dT)$ per entry and is independent of requested measurement
+count. The paired audit holds the measurement seed, error seed, and clean-state
+seed fixed across these conditions and records absolute/relative syndrome
+residuals plus syndrome and operator-row scale diagnostics. It does not change
+the preregistered exact-recovery criterion.
+
 ### Encoded state, error, and syndrome
 
 **DERIVED.** The encoded state and controlled corruption are

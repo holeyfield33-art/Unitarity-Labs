@@ -60,6 +60,7 @@ def test_zero_error_is_a_no_op():
     error = np.zeros((3, 3))
     metrics = recovery_metrics(operator, error, error, clean_state, operator.apply(error))
     assert metrics.success
+    assert metrics.relative_syndrome_residual == 0.0
 
 def test_wrong_parity_is_not_reported_as_successful_recovery():
     operator = IdentityLinearMap(rows=3, cols=3)

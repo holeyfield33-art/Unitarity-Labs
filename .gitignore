@@ -32,3 +32,4 @@ results/*
 !results/rank_syndrome/
 !results/rank_syndrome/README.md
 !results/rank_syndrome/synthetic_sweep.json
+!results/rank_syndrome/normalization_audit.json

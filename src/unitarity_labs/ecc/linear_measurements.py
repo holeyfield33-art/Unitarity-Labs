@@ -46,6 +46,27 @@ class GaussianLinearMap:
         return matrix
 
 
+class FixedScaleNestedGaussianLinearMap(GaussianLinearMap):
+    """Seeded Gaussian map with rows fixed at variance ``1 / (rows * cols)``.
+
+    For a fixed seed, an operator with more measurements contains the prior
+    operator's rows unchanged. This condition separates added information from
+    measurement-count-dependent row rescaling.
+    """
+
+    condition = "fixed_scale_nested"
+
+    def __init__(self, rows: int, cols: int, measurements: int, seed: int) -> None:
+        if rows < 1 or cols < 1 or measurements < 1:
+            raise ValueError("rows, cols, and measurements must all be positive")
+        self.rows = rows
+        self.cols = cols
+        self.measurements = measurements
+        self.seed = seed
+        rng = np.random.default_rng(seed)
+        self.matrices = rng.standard_normal((measurements, rows, cols)) / np.sqrt(rows * cols)
+
+
 class IdentityLinearMap:
     """Full-observation vectorization map used as a decoder plumbing control."""
 

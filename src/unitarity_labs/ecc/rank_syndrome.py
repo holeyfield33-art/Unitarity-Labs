@@ -23,6 +23,7 @@ class RecoveryMetrics:
     relative_error_recovery: float
     relative_state_recovery: float
     syndrome_residual: float
+    relative_syndrome_residual: float
     recovered_rank: int
     success: bool
 
@@ -205,6 +206,7 @@ def recovery_metrics(
         relative_error_recovery=error_relative,
         relative_state_recovery=state_relative,
         syndrome_residual=syndrome_residual,
+        relative_syndrome_residual=syndrome_residual / max(float(np.linalg.norm(syndrome)), epsilon),
         recovered_rank=numerical_rank(estimated_error),
         success=(error_relative < 1e-5 and state_relative < 1e-5 and syndrome_residual < 1e-7),
     )

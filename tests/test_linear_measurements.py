@@ -2,7 +2,11 @@
 
 import numpy as np
 
-from unitarity_labs.ecc.linear_measurements import GaussianLinearMap, IdentityLinearMap
+from unitarity_labs.ecc.linear_measurements import (
+    FixedScaleNestedGaussianLinearMap,
+    GaussianLinearMap,
+    IdentityLinearMap,
+)
 
 
 def test_gaussian_map_is_deterministic_and_has_expected_shape():
@@ -34,6 +38,12 @@ def test_gaussian_map_rows_are_nested_up_to_measurement_normalization():
         rtol=1e-15,
         atol=1e-15,
     )
+
+
+def test_fixed_scale_map_rows_are_exactly_nested_without_rescaling():
+    smaller = FixedScaleNestedGaussianLinearMap(rows=4, cols=3, measurements=20, seed=8)
+    larger = FixedScaleNestedGaussianLinearMap(rows=4, cols=3, measurements=60, seed=8)
+    np.testing.assert_array_equal(larger.matrices[: smaller.measurements], smaller.matrices)
 
 
 def test_identity_map_is_full_observation_and_self_adjoint():
