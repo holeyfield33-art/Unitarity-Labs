@@ -29,3 +29,6 @@ htmlcov/
 # Results (large or run-specific outputs; keep the README as an exception)
 results/*
 !results/README.md
+!results/rank_syndrome/
+!results/rank_syndrome/README.md
+!results/rank_syndrome/synthetic_sweep.json

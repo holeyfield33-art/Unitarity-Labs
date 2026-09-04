@@ -95,6 +95,47 @@ AND syndrome_residual < 1e-7
 These thresholds are not tuned per result. The zero-error control is evaluated
 as an exact no-op, avoiding a $0/0$ relative-error convention.
 
+## Numerical Audit and Noisy Syndromes
+
+**DERIVED.** For identical Gaussian seeds, maps at $m_1<m_2$ use the same
+unscaled first $m_1$ rows. Under the declared normalization,
+
+$$A_i^{(m_2)}=\sqrt{m_1/m_2}\,A_i^{(m_1)},\qquad i<m_1.$$
+
+This nested-row identity is unit tested. Thus a success at $m_1$ followed by a
+failure at $m_2$ is recorded as `NONMONOTONE_RECOVERY`, not called a
+mathematical failure. Solver nonmonotonicity is **MEASURED numerical behavior**.
+
+For exact-decoder failures the artifact records primary CVXPY status, objective,
+primal/feasibility residual, reconstruction metrics, singular-value extrema,
+and recovered numerical rank. The primary CLARABEL result is retained and each
+failure is rerun with SCS. A successful retry is `LIKELY_SOLVER_TOLERANCE`; an
+inaccurate status or failed feasibility is `UNRESOLVED_NUMERICAL`; otherwise it
+is `LIKELY_INFORMATION_FAILURE`.
+
+**HEURISTIC.** Threshold sensitivity reports fixed relative recovery thresholds
+$10^{-6}$, $10^{-5}$, and $10^{-4}$, retaining the preregistered syndrome limit
+$10^{-7}$. The primary predicate remains unchanged.
+
+For noisy stored parity $\tilde p$, the experimental decoder is
+`decode_nuclear_norm_noisy`, solving
+
+$$\min_Z\|Z\|_*\quad\text{subject to}\quad\|P(Z)-\tilde s\|_2\le\epsilon,$$
+
+where $\tilde s=P(Y)-\tilde p$. In controlled trials, $\epsilon$ is the known
+injected syndrome-noise norm, lower-bounded by solver tolerance; it is never
+tuned with the true error. Float64/32/16 parity quantization and seeded
+additive parity noise at relative levels $0,10^{-6},10^{-5},10^{-4},10^{-3},
+10^{-2}$ are measured using a fixed $10^{-3}$ noise-aware state/error threshold.
+This threshold is reporting-only and does not alter exact-recovery success.
+
+**MEASURED.** Redundancy is $\rho=m/(dT)$, and bit accounting uses parity bits
+divided by original-state bits at the same floating-point precision. This is
+also $\rho$, but it explicitly distinguishes stored bits from measurement count.
+Duplicate storage has ratio $1.0$. Finite-size results at $8\times8$,
+$12\times12$, and $16\times16$ are a finite-size trend only, not an asymptotic
+claim. Operational ECC efficiency is **UNRESOLVED**.
+
 ## Theory Reference
 
 **DERIVED.** The algebraic variety of $d\times T$ matrices with rank at most
@@ -123,6 +164,8 @@ Evidence classifications:
 - Gaussian-map recovery rate at a particular $m$: **MEASURED**.
 - Universal nuclear-norm success: **REJECTED**.
 - Model hidden-state applicability: **CONJECTURAL / NOT TESTED**.
+- Quantization tolerance: **MEASURED**.
+- Operational ECC efficiency: **UNRESOLVED**.
 
 ## Kill Criteria and Promotion Gate
 

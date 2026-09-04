@@ -6,6 +6,8 @@ import pytest
 from unitarity_labs.ecc.linear_measurements import IdentityLinearMap
 from unitarity_labs.ecc.rank_syndrome import (
     decode_nuclear_norm,
+    decode_nuclear_norm_noisy,
+    decode_nuclear_norm_with_diagnostics,
     generate_clean_state,
     generate_rank_error,
     numerical_rank,
@@ -32,6 +34,24 @@ def test_full_observation_decoder_recovers_error():
     estimate = decode_nuclear_norm(operator, syndrome)
     metrics = recovery_metrics(operator, error, estimate, clean_state, syndrome)
     assert metrics.success
+
+
+def test_exact_decoder_reports_feasibility_diagnostics():
+    operator = IdentityLinearMap(rows=3, cols=3)
+    error = generate_rank_error(3, 3, rank=1, seed=14)
+    estimate, diagnostics = decode_nuclear_norm_with_diagnostics(operator, operator.apply(error))
+    np.testing.assert_allclose(estimate, error, atol=1e-7)
+    assert diagnostics.status == "optimal"
+    assert diagnostics.feasibility_residual < 1e-7
+
+
+def test_noisy_decoder_respects_a_known_syndrome_noise_bound():
+    operator = IdentityLinearMap(rows=3, cols=3)
+    error = generate_rank_error(3, 3, rank=1, seed=15)
+    noise = np.full(operator.measurements, 1e-6)
+    syndrome = operator.apply(error) + noise
+    estimate = decode_nuclear_norm_noisy(operator, syndrome, np.linalg.norm(noise) + 1e-8)
+    assert np.linalg.norm(operator.apply(estimate) - syndrome) <= np.linalg.norm(noise) + 1e-7
 
 
 def test_zero_error_is_a_no_op():

@@ -25,6 +25,17 @@ def test_gaussian_map_adjoint_satisfies_frobenius_identity():
     )
 
 
+def test_gaussian_map_rows_are_nested_up_to_measurement_normalization():
+    smaller = GaussianLinearMap(rows=4, cols=3, measurements=20, seed=8)
+    larger = GaussianLinearMap(rows=4, cols=3, measurements=60, seed=8)
+    np.testing.assert_allclose(
+        larger.matrices[: smaller.measurements],
+        np.sqrt(smaller.measurements / larger.measurements) * smaller.matrices,
+        rtol=1e-15,
+        atol=1e-15,
+    )
+
+
 def test_identity_map_is_full_observation_and_self_adjoint():
     operator = IdentityLinearMap(rows=2, cols=3)
     matrix = np.arange(6, dtype=float).reshape(2, 3)
