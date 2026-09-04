@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "unitarity-labs"
+version = "0.1.0"
+description = "Experimental research framework for model-state integrity, representation telemetry, change detection, and error-correction research."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Unitarity Labs" }]
+dependencies = [
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/unitarity_labs"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
