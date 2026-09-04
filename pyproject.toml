@@ -18,6 +18,9 @@ dependencies = [
 dev = [
     "pytest>=8.0",
 ]
+ecc-research = [
+    "cvxpy>=1.5",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/unitarity_labs"]
