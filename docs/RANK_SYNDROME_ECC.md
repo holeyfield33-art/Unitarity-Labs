@@ -49,6 +49,22 @@ seed fixed across these conditions and records absolute/relative syndrome
 residuals plus syndrome and operator-row scale diagnostics. It does not change
 the preregistered exact-recovery criterion.
 
+## Decoder Forensics
+
+**MEASURED.** Each frozen nonmonotone reversal is regenerated from its recorded
+condition, rank, seed, and measurement count. The forensic record includes
+hashes of clean state, error, measurement bank, and syndrome; true-error
+feasibility; the true and recovered nuclear norms; CVXPY objective, dual,
+iterations, and solve time for CLARABEL and SCS at tolerances $10^{-6}$,
+$10^{-8}$, and $10^{-10}$; and a nuclear-norm feasible-direction curve.
+
+The dual/subgradient certificate check is numerical: it minimizes the distance
+between $P^*(\lambda)$ and a valid nuclear-norm subgradient form at the true
+error. It cannot prove certificate existence. Rank-factor recovery and
+low-rank-kernel searches use deterministic multi-start nonconvex
+factorizations and are labeled **HEURISTIC ORACLE** and **NO NUMERICAL LOW-RANK
+KERNEL FOUND**, respectively, unless a near-zero kernel residual is observed.
+
 ### Encoded state, error, and syndrome
 
 **DERIVED.** The encoded state and controlled corruption are
